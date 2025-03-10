@@ -1,0 +1,110 @@
+---- CREACION DE TABLAS
+
+--TABLA CATEGORIA
+CREATE TABLE [G2].[Categoria](
+	[Id_Catprod] VARCHAR(7) NOT NULL PRIMARY KEY,
+	[Categoria] VARCHAR(12) NULL
+);
+
+-- TABLA COMPRAS
+CREATE TABLE [G2].[Compras](
+	[Id_Compra] VARCHAR(5) NOT NULL,
+	[Id_Empleado] VARCHAR(4) NULL,
+	[Id_MetodoPago] INT NULL,
+	[Id_Promo] INT NULL,
+	[FechaCompra] DATE NULL,
+	[HoraCompra] TIME(7) NULL,
+	[Id_Visita] INT NULL,
+	[Id_TipoPedido] INT NULL,
+	CONSTRAINT FK_Compras_DetalleCompra FOREIGN KEY ([Id_Compra]) REFERENCES [G2].[DetalleCompra] ([Id_Compra]),
+	CONSTRAINT FK_Compras_Empleados FOREIGN KEY ([Id_Empleado]) REFERENCES [G2].[Empleados] ([Id_Empleado]),
+	CONSTRAINT FK_Compras_MetodoPago FOREIGN KEY ([Id_MetodoPago]) REFERENCES [G2].[MetodoPago] ([Id_MetodoPago]),
+	CONSTRAINT FK_Compras_Promocion FOREIGN KEY ([Id_Promo]) REFERENCES [G2].[Promocion] ([Id_Promo]),
+	CONSTRAINT FK_Compras_TipoPedido FOREIGN KEY ([Id_TipoPedido]) REFERENCES [G2].[TipoPedido] ([Id_TipoPedido]),
+	CONSTRAINT FK_Compras_Visitas FOREIGN KEY ([Id_Visita]) REFERENCES [G2].[Visitas] ([Id_Visita])
+);
+
+
+-- TABLA DETALLECOMPRA
+CREATE TABLE [G2].[DetalleCompra](
+	[Id_DetalleCompra] VARCHAR(8) NOT NULL PRIMARY KEY,
+	[Id_Compra] VARCHAR(5) UNIQUE NULL,
+	[Id_Producto] VARCHAR(8) NULL,
+	[Cantidad] INT NULL,
+	CONSTRAINT FK_DetalleCompra_Producto FOREIGN KEY ([Id_Producto]) REFERENCES [G2].[Producto] ([Id_Producto])
+);
+
+
+-- TABLA DISPOSITIVO
+
+CREATE TABLE [G2].[Dispositivo](
+	[Id_Dispositivo] VARCHAR(4) NOT NULL PRIMARY KEY,
+	[NomDispositivo] VARCHAR(20) NULL
+);
+
+-- TABLA EMPLEADOS
+CREATE TABLE [G2].[Empleados](
+	[Id_Empleado] VARCHAR(4) NOT NULL PRIMARY KEY,
+	[NomEmp] VARCHAR(25) NULL,
+	[Cargo] VARCHAR(11) NULL,
+	[FechaContratacion] DATE NULL
+);
+
+
+-- TABLA METODO PAGO
+CREATE TABLE [G2].[MetodoPago](
+	[Id_MetodoPago] INT NOT NULL PRIMARY KEY,
+	[MetodoPago] VARCHAR(7) NULL
+);
+
+
+-- TABLA PRODUCTO
+CREATE TABLE [G2].[Producto](
+	[Id_Producto] VARCHAR(8) NOT NULL PRIMARY KEY,
+	[NomProd] VARCHAR(25) NULL,
+	[Descripcion] VARCHAR(100) NULL,
+	[Precio] DECIMAL(10,2) NULL,
+	[Id_Catprod] VARCHAR(7) NULL,
+	CONSTRAINT FK_Producto_Categoria FOREIGN KEY ([Id_Catprod]) REFERENCES [G2].[Categoria] ([Id_Catprod])
+);
+
+
+-- TABLA PROMOCION
+CREATE TABLE [G2].[Promocion](
+	[Id_Promo] INT NOT NULL PRIMARY KEY,
+	[NomProm] VARCHAR(30) NULL,
+	[Descuento] FLOAT NULL
+);
+
+
+-- TABLA TIPO PEDIDO
+CREATE TABLE [G2].[TipoPedido](
+	[Id_TipoPedido] INT NOT NULL PRIMARY KEY,
+	[Tipo] VARCHAR(20) NULL
+);
+
+
+-- TABLA USUARIO
+CREATE TABLE [G2].[Usuario](
+	[Id_Usuario] VARCHAR(5) NOT NULL PRIMARY KEY,
+	[NombreUsuario] VARCHAR(25) NULL,
+	[Apellido] VARCHAR(50) NULL,
+	[Genero] CHAR(1) NULL,
+	[CodUbigeo] VARCHAR(6) NULL,
+	[Correo] VARCHAR(50) NULL,
+	[Telefono] VARCHAR(15) NULL,
+	[FechaRegistro] DATE NULL
+);
+
+
+-- TABLA VISITAS
+CREATE TABLE [G2].[Visitas](
+	[Id_Visita] INT NOT NULL PRIMARY KEY,
+	[Id_Usuario] VARCHAR(5) NULL,
+	[Id_Dispositivo] VARCHAR(4) NULL,
+	[FechaVisita] DATE NULL,
+	[HoraVisita] TIME(7) NULL,
+	CONSTRAINT FK_Visitas_Dispositivo FOREIGN KEY ([Id_Dispositivo]) REFERENCES [G2].[Dispositivo] ([Id_Dispositivo]),
+	CONSTRAINT FK_Visitas_Usuario FOREIGN KEY ([Id_Usuario]) REFERENCES [G2].[Usuario] ([Id_Usuario])
+);
+
